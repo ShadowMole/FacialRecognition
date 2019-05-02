@@ -2,6 +2,7 @@ import cv2
 import numpy
 import os
 
+
 # Python program for implementation of MergeSort
 def modifiedMergeSort(eVals, eVects):
     if len(eVals) > 1:
@@ -41,6 +42,7 @@ def modifiedMergeSort(eVals, eVects):
             j += 1
             k += 1
 
+
 def magic(vectors, meanVector):
     for i in range(len(vectors)):
         vectors[i] = numpy.subtract(vectors[i], meanVector)
@@ -56,35 +58,27 @@ def magic(vectors, meanVector):
         print(eVals[i])
 
     p = numpy.matmul(eVects, npvectors.transpose())
-    final = [[], [], [], [], []]
-    for i in range(4):
-        for j in range(20):
+    final = [[], [], [], [], [], [], [], [], [], [], [], [], [], [], []]
+    for i in range(14):
+        for j in range(19):
             final[i].append(p[j][i])
-    return final
+    return final, eVects
 
-def smallmagic(vector, meanVector):
+
+def smallmagic(vector, meanVector, eVects):
     vector = numpy.subtract(vector, meanVector)
     npvectors = numpy.asarray(vector)
     npvectors = npvectors.transpose()
-    covMat = numpy.matmul(npvectors.transpose(), npvectors)
-    #for i in range(5):
-       # print(covMat[i])
-    eVals, eVects = numpy.linalg.eig(covMat)
-    modifiedMergeSort(eVals, eVects)
-    for i in range(20):
-        print(eVals[i])
-
     p = numpy.matmul(eVects, npvectors.transpose())
     final = []
-    for j in range(20):
-        final[i].append(p[j])
+    for j in range(19):
+        final.append(p[j])
     return final
+
 
 def train():
     meanVector = []
-    stevenvectors = []
-    vectors2 = []
-    vectors3 = []
+    vectors = []
     for i in range(5):
         path = 'C:\\Users\\steve\\PycharmProjects\\FacialRecognition\\src\\TrainingImages\\1_'
         imname = str(i+1)+'.jpg'
@@ -108,7 +102,7 @@ def train():
                 else:
                     meanVector[n] = meanVector[n] + vector[n]
                 n = n + 1
-        stevenvectors.append(vector)
+        vectors.append(vector)
     for i in range(5):
         path = 'C:\\Users\\steve\\PycharmProjects\\FacialRecognition\\src\\TrainingImages\\2_'
         imname = str(i+1)+'.jpg'
@@ -129,7 +123,7 @@ def train():
                 vector.append(image[j, k] / 255)
                 meanVector[n] = meanVector[n] + vector[n]
                 n = n + 1
-        vectors2.append(vector)
+        vectors.append(vector)
     for i in range(5):
         path = 'C:\\Users\\steve\\PycharmProjects\\FacialRecognition\\src\\TrainingImages\\3_'
         imname = str(i+1)+'.jpg'
@@ -150,69 +144,57 @@ def train():
                 vector.append(image[j, k] / 255)
                 meanVector[n] = meanVector[n] + vector[n]
                 n = n + 1
-        vectors3.append(vector)
+        vectors.append(vector)
     meanVector = numpy.divide(meanVector, 15)
-    return meanVector, magic(stevenvectors, meanVector), magic(vectors2, meanVector), magic(vectors3, meanVector)
+    final, eVects = magic(vectors, meanVector)
+    return meanVector,final, eVects
 
 
-def test(image, meanVector, steven, train2, train3, actual, num):
+def test(image, meanVector, train, eVects, actual, num):
     vector = []
     for j in range(image.shape[0]):
         for k in range(image.shape[1]):
             vector.append(image[j, k] / 255)
-    vector = smallmagic(vector, meanVector)
+    vector = smallmagic(vector, meanVector, eVects)
     min = 10000000
     type = ''
-    for i in range(4):
+    for i in range(14):
         diff = 0
         for j in range(19):
-            x = vector[j] - steven[i][j]
+            x = vector[j] - train[i][j]
             diff += x * x
         diff = numpy.sqrt(diff)
         if diff < min:
             min = diff
-            type = '1'
-    for i in range(4):
-        diff = 0
-        for j in range(19):
-            x = vector[j] - train2[i][j]
-            diff += x * x
-        diff = numpy.sqrt(diff)
-        if diff < min:
-            min = diff
-            type = '2'
-    for i in range(4):
-        diff = 0
-        for j in range(19):
-            x = vector[j] - train3[i][j]
-            diff += x * x
-        diff = numpy.sqrt(diff)
-        if diff < min:
-            min = diff
-            type = '3'
-    cv2.imwrite('C:\\Users\\steve\\PycharmProjects\\FacialRecognition\\src\\Tests\\' + str(num) + '_' + type + '_' + actual + '.jpg', img)
+            if i < 5:
+                type = '1'
+            elif i < 10:
+                type = '2'
+            else:
+                type = '3'
+    cv2.imwrite('C:\\Users\\steve\\PycharmProjects\\FacialRecognition\\src\\Tests\\' + str(num) + '_' + type + '_' + actual + '.jpg', image)
 
     #How do I show images in python with labels?
     #This is done except for getting all of the images in and showing output.
 
 
-mean, steven, train2, train3 = train()
+mean, train, eVects = train()
 num = 1
-for i in range(4):
+for i in range(5):
     path = 'C:\\Users\\steve\\PycharmProjects\\FacialRecognition\\src\\TrainingImages\\'
     path = path + 'test1_' + str(i+1) + '.jpg'
     image = cv2.imread(path, 0)
-    test(image, mean, steven, train2, train3, '1', num)
+    test(image, mean, train, eVects, '1', num)
     num += 1
-for i in range(4):
+for i in range(5):
     path = 'C:\\Users\\steve\\PycharmProjects\\FacialRecognition\\src\\TrainingImages\\'
     path = path + 'test2_' + str(i+1) + '.jpg'
     image = cv2.imread(path, 0)
-    test(image, mean, steven, train2, train3, '2', num)
+    test(image, mean, train, eVects, '2', num)
     num += 1
-for i in range(4):
+for i in range(5):
     path = 'C:\\Users\\steve\\PycharmProjects\\FacialRecognition\\src\\TrainingImages\\'
     path = path + 'test3_' + str(i+1) + '.jpg'
     image = cv2.imread(path, 0)
-    test(image, mean, steven, train2, train3, '3', num)
+    test(image, mean, train, eVects, '3', num)
     num += 1
