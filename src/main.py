@@ -1,3 +1,5 @@
+# Jatin Bhakta and Steven Bruman
+# HW 5 - Facial Recognition Due 5/1/19
 import cv2
 import numpy
 import os
@@ -85,12 +87,14 @@ def train():
     stevenvectors = []
     vectors2 = []
     vectors3 = []
+    # path = 'C:\\Users\\steve\\PycharmProjects\\FacialRecognition\\src\\TrainingImages\\'
+    path = 'C:\\Users\\Jatin\\Git\\FacialRecognition\\src\\TrainingImages\\'
+
     for i in range(5):
-        path = 'C:\\Users\\steve\\PycharmProjects\\FacialRecognition\\src\\TrainingImages\\1_'
         imname = str(i+1)+'.jpg'
         # Hard Coded file path because it won't work otherwise
         # Path for Steven
-        newpath = path + imname
+        newpath = path + '1_' + imname
         # Path for Jatin
         # path ='' + imname
 
@@ -110,11 +114,10 @@ def train():
                 n = n + 1
         stevenvectors.append(vector)
     for i in range(5):
-        path = 'C:\\Users\\steve\\PycharmProjects\\FacialRecognition\\src\\TrainingImages\\2_'
         imname = str(i+1)+'.jpg'
         # Hard Coded file path because it won't work otherwise
         # Path for Steven
-        newpath = path + imname
+        newpath = path + '2_' + imname
         # Path for Jatin
         # path ='' + imname
 
@@ -131,11 +134,10 @@ def train():
                 n = n + 1
         vectors2.append(vector)
     for i in range(5):
-        path = 'C:\\Users\\steve\\PycharmProjects\\FacialRecognition\\src\\TrainingImages\\3_'
         imname = str(i+1)+'.jpg'
         # Hard Coded file path because it won't work otherwise
         # Path for Steven
-        newpath = path + imname
+        newpath = path + '3_' + imname
         # Path for Jatin
         # path ='' + imname
 
@@ -156,6 +158,8 @@ def train():
 
 
 def test(image, meanVector, steven, train2, train3, actual, num):
+    # writePath = 'C:\\Users\\steve\\PycharmProjects\\FacialRecognition\\src\\Tests\\'
+    writePath = 'C:\\Users\\Jatin\\Git\\FacialRecognition\\src\\Tests\\'
     vector = []
     for j in range(image.shape[0]):
         for k in range(image.shape[1]):
@@ -190,7 +194,7 @@ def test(image, meanVector, steven, train2, train3, actual, num):
         if diff < min:
             min = diff
             type = '3'
-    cv2.imwrite('C:\\Users\\steve\\PycharmProjects\\FacialRecognition\\src\\Tests\\' + str(num) + '_' + type + '_' + actual + '.jpg', img)
+    cv2.imwrite(writePath + str(num) + '_' + type + '_' + actual + '.jpg', img)
 
     #How do I show images in python with labels?
     #This is done except for getting all of the images in and showing output.
@@ -198,21 +202,22 @@ def test(image, meanVector, steven, train2, train3, actual, num):
 
 mean, steven, train2, train3 = train()
 num = 1
+# Steven's and Jatin's path
+# path = 'C:\\Users\\steve\\PycharmProjects\\FacialRecognition\\src\\TrainingImages\\'
+path = 'C:\\Users\\Jatin\\Git\\FacialRecognition\\src\\TrainingImages\\'
+
 for i in range(4):
-    path = 'C:\\Users\\steve\\PycharmProjects\\FacialRecognition\\src\\TrainingImages\\'
-    path = path + 'test1_' + str(i+1) + '.jpg'
-    image = cv2.imread(path, 0)
+    imgPath = path + 'test1_' + str(i+1) + '.jpg'
+    image = cv2.imread(imgPath, 0)
     test(image, mean, steven, train2, train3, '1', num)
     num += 1
 for i in range(4):
-    path = 'C:\\Users\\steve\\PycharmProjects\\FacialRecognition\\src\\TrainingImages\\'
-    path = path + 'test2_' + str(i+1) + '.jpg'
-    image = cv2.imread(path, 0)
+    imgPath = path + 'test2_' + str(i+1) + '.jpg'
+    image = cv2.imread(imgPath, 0)
     test(image, mean, steven, train2, train3, '2', num)
     num += 1
 for i in range(4):
-    path = 'C:\\Users\\steve\\PycharmProjects\\FacialRecognition\\src\\TrainingImages\\'
-    path = path + 'test3_' + str(i+1) + '.jpg'
-    image = cv2.imread(path, 0)
+    imgPath = path + 'test3_' + str(i+1) + '.jpg'
+    image = cv2.imread(imgPath, 0)
     test(image, mean, steven, train2, train3, '3', num)
     num += 1
