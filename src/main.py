@@ -42,14 +42,14 @@ def modifiedMergeSort(eVals, eVects):
             k += 1
 
 def magic(vectors, meanVector):
-    npvectors = numpy.asarray(vectors)
-    print(len(npvectors.transpose()))
     for i in range(len(vectors)):
         vectors[i] = numpy.subtract(vectors[i], meanVector)
+    npvectors = numpy.asarray(vectors)
+    print(len(npvectors.transpose()))
     covMat = numpy.matmul(npvectors.transpose(), npvectors)
     covMat = numpy.divide(covMat, 5)
-    for i in range(5):
-        print(covMat[i])
+    #for i in range(5):
+     #   print(covMat[i])
     eVals, eVects = numpy.linalg.eig(covMat)
     modifiedMergeSort(eVals, eVects)
     for i in range(20):
@@ -63,13 +63,12 @@ def magic(vectors, meanVector):
     return final
 
 def smallmagic(vector, meanVector):
-    npvectors = numpy.asarray(vector)
-    print(len(npvectors.transpose()))
     vector = numpy.subtract(vector, meanVector)
+    npvectors = numpy.asarray(vector)
+    npvectors = npvectors.transpose()
     covMat = numpy.matmul(npvectors.transpose(), npvectors)
-    covMat = numpy.divide(covMat, 5)
-    for i in range(5):
-        print(covMat[i])
+    #for i in range(5):
+       # print(covMat[i])
     eVals, eVects = numpy.linalg.eig(covMat)
     modifiedMergeSort(eVals, eVects)
     for i in range(20):
